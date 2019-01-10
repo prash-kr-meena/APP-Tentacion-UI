@@ -20,7 +20,8 @@ appModule.config(['$routeProvider', function ($routeProvider) {
       .when('/', {
             title: 'APP-Tencation',
             controller: 'main_ctrl',
-            templateUrl: './views/root.html',
+            // templateUrl: './views/root.html',
+            templateUrl: './views/videoSync.html',
       })
       .when('/textChat', {
             title: 'TextChat',
