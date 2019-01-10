@@ -20,7 +20,8 @@ appModule.config(['$routeProvider', function ($routeProvider) {
       .when('/', {
             title: 'APP-Tencation',
             controller: 'main_ctrl',
-            templateUrl: './views/root.html',
+            // templateUrl: './views/root.html',
+            templateUrl: './views/videoSync.html',
       })
       .when('/textChat', {
             title: 'TextChat',
@@ -57,8 +58,8 @@ appModule.controller("main_ctrl", function ($window, $rootScope, $route) { // NO
 
       this.errorList = [];
 
-      console.log($rs.buyer_loged_in);
-      console.log($rs.dealer_loged_in);
+      // console.log($rs.buyer_loged_in);
+      // console.log($rs.dealer_loged_in);
 
 
       // ? if the user is loged in don't show the car LOGO to him
