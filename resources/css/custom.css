@@ -1,0 +1,98 @@
+body {
+    /* width: 100%; */
+    background-color: #ddd6c9;
+    font-family: "Verdana";
+    margin-top: 70px;
+}
+
+/* ========================    errors for passport  ======================== */
+.alert-error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.alert-success_msg {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+/* ========================    links    Start  ======================== */
+/* ------- styleis yellow link with box -------*/
+a.stylish_yello_link:link,
+a.stylish_yello_link:visited {
+    background-color: transparent;
+    color: black;
+    border: 1px solid rgb(112, 114, 112);
+    padding: 2px 14px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+a.stylish_yello_link:hover,
+a.stylish_yello_link:active {
+    background-color: rgb(247, 152, 38);
+    color: white;
+}
+
+/* ------- styleis RED link with box -------*/
+a.stylish_red_link:link,
+a.stylish_red_link:visited {
+    background-color: transparent;
+    color: red;
+    border: 1px solid rgb(112, 114, 112);
+    padding: 2px 14px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+a.stylish_red_link:hover,
+a.stylish_red_link:active {
+    background-color: red;
+    color: white;
+}
+
+/* ----- YELLOW linkds */
+a.yello_link:link,
+a.yello_link:visited {
+    background-color: transparent;
+    color: rgb(247, 152, 38);
+    border-bottom: 0px dotted;
+    /* padding: 0px 14px; */
+    font-weight: 100;
+    /* font-style: italic; */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+a.yello_link:hover,
+a.stylish_link:active {
+    /* background-color: black; */
+    color: black;
+}
+
+/*  ----- YELLOW linkds */
+a.red_link:link,
+a.red_link:visited {
+    background-color: transparent;
+    color: red;
+    border-bottom: 0px dotted;
+    /* padding: 0px 14px; */
+    font-weight: 100;
+    font-style: italic;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+a.red_link:hover,
+a.red_link:active {
+    /* background-color: black; */
+    color: black;
+}
+
+/* ========================    links    END  ======================== */

@@ -1,0 +1,218 @@
+<style>
+    /* Always set the map height explicitly to define the size of the div
+           * element that contains the map. */
+    #map {
+        float: right;
+        height: 90%;
+        width: 62%;
+    }
+
+    #content {
+        float: left;
+        /* border: 1px solid red; */
+        height: 90%;
+        width: 38%;
+    }
+
+    .filter-bar {
+        border: 1px solid blue;
+        position: static;
+        height: 10%;
+        width: 100%;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+        max-width: 100%;
+        overflow-x: hidden;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+<!-- card view -->
+<style>
+    .card-box {
+        background: #d8d0c2;
+        min-height: 300px;
+        position: relative;
+        padding: 30px 30px 20px;
+        margin-bottom: 20px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .card-box:hover {
+        background: linear-gradient(to right, #1fa2ff17 0%, #12d8fa2b 51%, #1fa2ff36 100%);
+    }
+
+    .card-box:after {
+        display: block;
+        background: #2196F3;
+        border-top: 2px solid #2196F3;
+        content: '';
+        width: 100%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+    }
+
+    .card-title h2 {
+        margin: 0;
+        padding-top: 5%;
+        color: #2196F3;
+        font-family: 'Oswald', sans-serif;
+        text-transform: uppercase;
+        font-size: 24px;
+        line-height: 1;
+        margin-bottom: 15px;
+    }
+
+    .card-title p {
+        margin: 0;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .card-link a {
+        text-decoration: none;
+        font-family: 'Oswald', sans-serif;
+        color: #FF5722;
+        font-size: 15px;
+    }
+</style>
+
+
+<div ng-if="dataReady" class="container" ng-controller="buyer_show_dealers_ctrl">
+
+
+
+    <br><br><br>
+    <!-- {{google_maps_js_API_Key}} -->
+    <!-- {{googleMapsUrl}} -->
+    <b>{{hi}}</b>
+
+    <!-- map-lazy-load-params="{{googleMapsUrl}}"  -->
+    <div map-lazy-load="https://maps.google.com/maps/api/js" map-lazy-load-params="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHnTFFFAs0xNflQxehDK--8yTiMqOOYVM">
+
+        <input places-auto-complete types="['geocode']" on-place-changed="placeMarker()" style="width: 25%; background-color: darkgray;" />
+
+        <span style="margin-left: 140px;">
+            Dealers within :
+            <input ng-model="desired_distance" ng-keypress="limit_markers_and_redraw_event($event)" type="text" style=" background-color: darkgray; width: 45px;" />
+            km
+            <!-- <a href="" ng-click="limit_markers_and_redraw()" class="stylish_yello_link">></a> -->
+        </span>
+
+
+        <!-- on-click="getpos($event)"   -> DISABLING the functionality to change location by clicking on map  ie. YOU NEED TO DRAG -->
+        <ng-map scrollwheel="false" center="{{center}}" zoom="8" default-style="false" style="height: 600px; width: 100%; display:block;">
+
+            <!-- MAIN MARKER -->
+            <marker position="{{my_latlng}}" on-dragend="getpos($event)" animation="Animation.BOUNCE" animation="DROP"
+                draggable="true">
+            </marker>
+
+            <shape id="circle" name="circle" centered="true" stroke-color='#FF0000' stroke-opacity="0.8" stroke-weight="2"
+                center="{{my_latlng}}" radius="{{desired_distance *1000 }}" editable="false"></shape>
+
+            <!-- ============================================================ -->
+
+
+            <info-window id="Dealer-Info">
+                <div ng-non-bindable>
+                    <h6>{{selectedDealer.name}}</h6>
+                    <!-- {{selectedDealer.address.proper_address}} <br> -->
+                    <strong> Dealer's address : __nil__ </strong> <br>
+                    <p>
+                        <strong> Rating : <b style="color: blue">{{selectedDealer.rating}}</b></strong> <br>
+
+                        <strong> No. of people rated : <b style="color: blue">
+                                {{selectedDealer.no_of_people_rated}} </b> </strong> <br>
+
+                        <strong>Email: <b style="color: green">{{selectedDealer.email}} </b></strong>
+                    </p>
+                </div>
+            </info-window>
+
+
+            <marker ng-repeat="d in dealerList" position="{{d.address.lat }} , {{d.address.long}}" title="{{d.name}}"
+                id="{{d._id}}" on-click="showDealer(event, d )">
+            </marker>
+
+
+        </ng-map>
+
+        <b> lat : <span style="color:green"> {{my_latlng[0]}}</span> </b> &nbsp;&nbsp;&nbsp;
+        <b> lng : <span style="color:green"> {{my_latlng[1]}}</span> </b> <br>
+
+        <!-- {{selectedDealer}} -->
+
+
+
+        <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+        <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+        <br>
+        <div>
+            <span hidden> {{send_id_dealer}}</span>
+
+            <span style="font-weight: bold">To :</span> {{send_mail_dealer.split("@")[0]}}
+
+            <span style="font-weight: bold"> Message :</span>
+            <textarea ng-model="send_message_dealer" cols="80" rows="2" style="background-color:#dfd4c0; margin-left: 5px;">
+
+
+
+ </textarea>
+            <a ng-click="send_message()" href="" class="stylish_yello_link" style="margin-left: 10px;">Send</a>
+        </div>
+        <br>
+
+
+        <!-- LIST VIEW OF all the dealsers -->
+        <br>
+        <h1>Dealers list</h1>
+        <br>
+
+        <div class="row">
+
+            <div class="col-md-4" ng-show="d.visible" ng-repeat="d in dealerList">
+                <div class="card-box">
+                    <div class="card-title">
+                        <h2>{{d.name}}</h2>
+                        Address : __nil__ <br>
+                        <p>
+                            Rating : <span style="color: blue">{{d.rating}}</span><br>
+
+                            No. of people rated : <span style="color: blue">
+                                {{d.no_of_people_rated}} </span> <br>
+
+                            Email:
+                            <span style="color: green">{{d.email}}</span>
+                        </p>
+                    </div>
+                    <div class="card-link">
+                        <a  ng-click="chosseDealer_to_connect(d._id, d.email)" href="" class="c-link">Contact Dealer &nbsp; &nbsp; >>
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>

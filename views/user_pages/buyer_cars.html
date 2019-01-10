@@ -1,0 +1,268 @@
+<style>
+
+    html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+        .well {
+            margin-bottom: 0px;
+        }
+
+    label {
+     border:1px solid #ccc;
+     /* padding:10px; */
+     margin:0 0 10px;
+     display:block;
+    }
+
+    label:hover {
+     background:#eee;
+     cursor:pointer;
+    }
+
+    #company_names{
+        text-transform:capitalize;
+    }
+
+
+    </style>
+
+
+<!-- card view -->
+<style>
+    .card-box {
+                background: #d8d0c2;
+                min-height: 300px;
+                position: relative;
+                padding: 30px 30px 20px;
+                margin-bottom: 20px;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-direction: column;
+                flex-direction: column;
+                -webkit-box-pack: justify;
+                -ms-flex-pack: justify;
+                justify-content: space-between;
+                position: relative;
+                cursor: pointer;
+            }
+
+            .card-box:hover {
+                background: linear-gradient(to right, #1fa2ff17 0%, #12d8fa2b 51%, #1fa2ff36 100%);
+            }
+
+            .card-box:after {
+                display: block;
+                background: #2196F3;
+                border-top: 2px solid #2196F3;
+                content: '';
+                width: 100%;
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+            }
+
+            .card-title h2 {
+                margin: 0;
+                padding-top: 5%;
+                color: #2196F3;
+                font-family: 'Oswald', sans-serif;
+                text-transform: uppercase;
+                font-size: 24px;
+                line-height: 1;
+                margin-bottom: 15px;
+            }
+
+            .card-title p {
+                margin: 0;
+                margin-bottom: 10px;
+                font-size: 16px;
+            }
+
+            .card-link a {
+                text-decoration: none;
+                font-family: 'Oswald', sans-serif;
+                color: #FF5722;
+                font-size: 15px;
+            }
+    </style>
+
+
+<!-- for select options   -->
+<style>
+    .styled-select {
+      background:  no-repeat 80% 0;
+      height: 29px;
+      overflow: hidden;
+      width: 200px;
+    }
+
+    </style>
+
+
+
+<!-- Slider css -->
+<script>
+    var slider = document.getElementById("myRange");
+            var output = document.getElementById("demo");
+            output.innerHTML = slider.value;
+
+            slider.oninput = function() {
+              output.innerHTML = this.value;
+            }
+    </script>
+
+<style>
+    .slidecontainer {
+        width: 100%;
+    }
+
+    .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 25px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+
+    .slider:hover {
+        opacity: 1;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        background: #4CAF50;
+        cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        background: #4CAF50;
+        cursor: pointer;
+    }
+    </style>
+
+
+
+
+
+<div ng-controlled="buyer_car_ctrl">
+
+    <div class="row" style="border: 0px solid red">
+
+        <div ng-if="companyNames_ready" class="col-sm-3 well" style="background-color:rgb(207, 199, 187); padding-left: 35px;">
+            <div style="margin-top: 10px; margin-left: 130px;">
+                <a href="" class="stylish_yello_link" ng-click="getCars()"> Find Cars</a>
+            </div>
+            <br>
+
+            <!-- Transmission Option -->
+            <span style="font-weight: bold; padding-right: 3px;">Transmission : </span>
+            <select class="styled-select select" ng-change="change_transmission(transmission)" data-ng-model="transmission"
+                data-ng-options="t for t in transmission_options">
+            </select>
+            <br>
+
+            <hr>
+            <!-- Model year Option -->
+            <span style="font-weight: bold">Model Year : &nbsp;&nbsp;&nbsp;</span>
+            <select class="styled-select" ng-change="change_year(year_model)" data-ng-model="year_model"
+                data-ng-options="year for year in year_model_options">
+            </select>
+            <br>
+            <hr>
+
+            <!-- car color Option -->
+            <span style="font-weight: bold">Car Color : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <select class="styled-select" ng-change="change_color(car_color)" data-ng-model="car_color" data-ng-options="color for color in car_color_options">
+            </select>
+            <br>
+            <hr>
+
+            <br>
+            <!-- COMPANY LIST -->
+            <span style="font-size: 20px; font-weight: bold; margin-left: 0px;"> Company Names :</span>
+            <ol>
+                <label ng-repeat="c in company_names" style="margin-top: 15px; border: 1px;">
+                    <input type="checkbox" ng-model="active" value="{{c.company_name}}" ng-change="change(c.company_name, active)">
+                    <span id="company_names">&nbsp;{{c.company_name}} </span>
+                </label>
+
+            </ol>
+
+        </div>
+
+
+        <!--  ********************************  CARS  ************************************ -->
+        <!--  ***************************************************************************** -->
+
+
+        <div class="col-sm-9 well" style="height:700px; ">
+
+
+            <input class="slider" id="myRange" type="range" ng-model="slider.curValue" min="{{slider.minValue}}" max="{{slider.maxValue}}">
+            <div>
+                Min: <code> {{slider.minValue}} </code>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Min: <code> {{slider.maxValue}} </code>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                value = <b> <code>{{slider.curValue}}</code> </b><br />
+            </div>
+
+            <hr>
+
+            <!-- <span style="font-size: 100px;">Cars</span> -->
+            <br>
+
+
+            <!--  LIST VIEW OF all the dealsers-->
+
+            <div class="row">
+
+                <div class="col-md-4" ng-if="carList_ready" ng-repeat="car in carList | filter:priceRang">
+                    <div class="card-box">
+                        <div class="card-title">
+                            <span hidden> {{car._id}}</span>
+                            <!-- {{car.year}} -->
+                            <h2><span> <span> {{car.model}}</span> </span></h2>
+                            <span> Price : <span style="font-weight:bold;"> &#x20b9; {{car.PriceInINR}}</span> </span><br>
+                            <p>
+                                <span> Year : <span style="font-weight:bold;"> {{car.year}}</span> </span> <br>
+
+                                <span> Color : <span style="font-weight:bold;"> {{car.color}}</span> </span> <br>
+
+
+                                <span> Transmission : <span style="font-weight:bold;"> {{car.transmission_type}}</span>
+                                </span> <br>
+
+                                <span> Engine : <span> {{car.engine}}</span> </span><br>
+                                <span> Trim : <span> {{car.trim}}</span> </span><br>
+                                <span> Body : <span> {{car.body}}</span> </span><br>
+
+                            </p>
+                        </div>
+                        <div class="card-link">
+                            <a href="" class="c-link">Contact Dealer &nbsp; &nbsp; >>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>

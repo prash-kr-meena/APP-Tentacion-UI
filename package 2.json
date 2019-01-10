@@ -1,0 +1,24 @@
+{
+  "name": "appthon-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "http-server  -c-1  --cors  -o"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prashant-kr-314/appthon-frontend.git"
+  },
+  "author": "prashant kumar meena",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prashant-kr-314/appthon-frontend/issues"
+  },
+  "homepage": "https://github.com/prashant-kr-314/appthon-frontend#readme",
+  "dependencies": {
+    "http-server": "^0.11.1",
+    "ngmap": "^1.18.4"
+  }
+}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="appathon-frontend">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- ----------------------------  BOOTSTRAP files  --------------------------- -->
+    <script src="./resources/jquery.min.js"></script> <!-- add this befor bootstrap -- IMPORTANT -->
+    <link rel="stylesheet" href="./resources/bootstrap-4.1.1/css/bootstrap.min.css">
+    <script src="./resources/bootstrap-4.1.1/js/bootstrap.min.js"></script>
+
+    <!-- ----------------------------  CUSTOM CSS  --------------------------- -->
+    <link rel="stylesheet" href="./resources/css/custom.css">
+
+
+    <title>APP-Tencation</title>
+
+    <script src="./resources/angular.js"></script>   <!-- angular -->
+    <script src="./resources/ng-route.js"></script>  <!-- ng-route -->
+
+
+    <!-- socket io CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+
+    <!-- bootstrap CDN font-awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+
+    <!-- ng-map -->
+    <!-- <script src="//maps.google.com/maps/api/js?key=AIzaSyDSCmtZj4AhNElt0AKf7h3JboQga1qXp4k&libraries=places"></script> -->
+    <!-- <script src="/node_modules/ngmap/build/scripts/ng-map.min.js"></script> -->
+
+
+    <script src="./index.js"></script>
+
+
+</head>
+
+<body ng-controller="main_ctrl as main">
+
+
+    <div class="container" ng-hide="main.error404">
+
+        <!-- A grey horizontal navbar that becomes vertical on small screens -->
+        <nav class="navbar navbar-expand-md bg-dark fixed-top navbar-dark">
+
+            <a href="#"></a> <!-- JUST KEEP ITS for adjustment -->
+            <a class="navbar-brand " href="#!" style="position: fixed;  height: 80px; width: 60px;">
+                <img src="./resources//images//bitcoin_logo.png" alt="Logo" style="width:90px; margin-top: 0px; border: 0px solid red; position: fixed">
+            </a>
+
+            <!-- <a class="navbar-brand .d-md-none .d-lg-block " href="/" >
+                <img src="/images/bitcoin_logo.png" alt="Logo" style="width:30px;">
+            </a> -->
+
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span> </button>
+
+
+
+            <!-- Links -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                <!-- ie if user is logged in  -->
+                <ul ng-show="buyer_loged_in || dealer_loged_in" class="navbar-nav mr-auto">
+
+
+
+                    <li ng-show="buyer_loged_in" class="nav-item" style=" margin-left: 90px;">
+                        <a class="nav-link" href="#!/cars">Cars</a>
+                    </li>
+                    <!-- -------------------------------------------------------------------- -->
+                    <li ng-show="dealer_loged_in" class="nav-item" style=" margin-left: 90px;">
+                        <a class="nav-link" href="/">
+                            <span style="border-bottom: 1px dotted #ddd6c9; padding-bottom: 7px;">
+                                Add Car
+                            </span>
+                        </a>
+                    </li>
+
+
+
+                    <li ng-show="buyer_loged_in" class="nav-item" style="margin-left: 90px;">
+                        <a class="nav-link" href="#!/dealers">
+                            Dealers
+                        </a>
+                    </li>
+                    <!-- -------------------------------------------------------------------- -->
+                    <li ng-show="dealer_loged_in" class="nav-item" style=" margin-left: 90px;">
+                        <a class="nav-link" href="/">
+                            <span style="border-bottom: 1px dotted #ddd6c9; padding-bottom: 7px;">
+                                Dashboard
+                            </span>
+                        </a>
+                    </li>
+
+
+
+                    <li class="nav-item" style=" margin-left: 90px;">
+                        <a class="nav-link" href="#" ng-click="re_render()">Re-Render 3</a>
+                    </li>
+
+
+                    <li class="nav-item" style=" margin-left: 90px;">
+                        <a class="nav-link" href="#!/inbox">Inbox</a>
+                    </li>
+                    <li class="nav-item" style=" margin-left: 90px;">
+                        <a class="nav-link" href="#!/outbox">Outbox</a>
+                    </li>
+
+                </ul>
+
+
+                <ul class="navbar-nav ml-auto">
+
+                    <!-- ie if user is NOT logged  -->
+                    <li ng-hide="buyer_loged_in || dealer_loged_in" class="nav-item" style=" margin-left: 90px;">
+                        <a class="nav-link" href="#!users/signup">
+                            <span class="" style="border-bottom: 1px dotted #ddd6c9; padding-bottom: 7px;">
+                                Sign Up
+                            </span>
+                        </a>
+                    </li>
+
+                    <li ng-hide="buyer_loged_in || dealer_loged_in" class="nav-item" style="margin-left: 90px; margin-right:10px;">
+                        <a class="nav-link" href="#!users/login">
+                            <span class="" style="border-bottom: 1px dotted #ddd6c9; padding-bottom: 7px;">
+                                Login
+                            </span>
+                        </a>
+                    </li>
+
+
+
+                    <li ng-show="buyer_loged_in || dealer_loged_in" class="nav-item" style="margin-left: 90px; margin-right:10px;">
+                        <a ng-click="main.logout()" class="nav-link" href="/">
+                            <span style="border-bottom: 1px dotted #ddd6c9; padding-bottom: 7px;">
+                                Log-out
+                            </span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+
+
+            <!-- =================================================================================-->
+
+
+        </nav>
+    </div>
+
+    <div ng-view>
+    </div>
+
+</body>
+
+</html>
+
+
+<!-- ----------------------------  CUSTOM JS  --------------------------- -->
+<script src="./resources/js/custom.js"> </script>
