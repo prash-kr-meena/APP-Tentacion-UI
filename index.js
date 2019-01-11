@@ -1,27 +1,44 @@
-"use strict";
+'use strict';
 
-// ? ------------------------------------------------------------------------------------------------------
-let baseUrl = 'http://localhost:3000';
+// ? ---------------------------------  Globals ------------------------------------
+let serverPort = 5000;
+// make connection from front-end to the server
+let socket = io.connect('http://localhost:'+serverPort);
+
+let baseUrl = 'http://localhost:' + serverPort;
 
 
-// ? ------------------------------------------------------------------------------------------------------
+let userEmail = undefined;
 
-let appModule = angular.module("appathon-frontend", ["ngRoute"]) //'ngMap'
 
-.run(function ($rootScope, $window) {
+
+// ? -------------------------------------------------------------------------------
+
+let app = angular.module("Tencation-UI", ["ngRoute"]); //'ngMap'
+
+
+
+app.run(['$rootScope', '$route', '$window',function ($rootScope, $route, $window) {
+      // ? change page title
+      $rootScope.$on('$routeChangeSuccess', function () {
+            document.title = $route.current.title;
+      });
+
       // * check if used logged in Or NOT   ---> INITIALLY its false (AS we are NOT USING SESSIONS)
       $rootScope.user_loged_in = false; //? to check if the user loged in
       $rootScope._id = undefined;
       // $window.location.href = "#!/";
-});
+}]);
 
-appModule.config(['$routeProvider', function ($routeProvider) {
+
+
+
+app.config(['$routeProvider', function ($routeProvider) {
       $routeProvider
       .when('/', {
             title: 'APP-Tencation',
-            controller: 'main_ctrl',
-            // templateUrl: './views/root.html',
-            templateUrl: './views/videoSync.html',
+            // templateUrl: './views/videoSync.html',
+            templateUrl: './views/root.html',
       })
       .when('/textChat', {
             title: 'TextChat',
@@ -40,7 +57,7 @@ appModule.config(['$routeProvider', function ($routeProvider) {
       })
       .otherwise({
             title: 'ERROR',
-            // templateUrl: "./views/page404.html",
+            templateUrl: "./views/page404.html",
             // templateUrl: "/",
             // controller: 'error_404_ctrl',
             redirectTo: "/"
@@ -48,52 +65,58 @@ appModule.config(['$routeProvider', function ($routeProvider) {
 }]);
 
 
-// ! ========================================================
+// ! =======================   Controllers    =================================
 
 
-appModule.controller("main_ctrl", function ($window, $rootScope, $route) { // NOT doing $scope injection   --> this refers to $scope
+
+
+app.controller("main_ctrl", function ($window, $rootScope, $route, $http) { // NOT doing $scope injection   --> this refers to $scope
       let $rs = $rootScope;
 
       this.error404 = false;
 
       this.errorList = [];
 
-      console.log($rs.buyer_loged_in);
-      console.log($rs.dealer_loged_in);
-
 
       // ? if the user is loged in don't show the car LOGO to him
-      if ($rs.buyer_loged_in) {
-            $window.location.href = '#!/cars';
-      } else if ($rs.dealer_loged_in) {
-            $window.location.href = '#!/dashboard';
+      if ($rs.user_loged_in) {
+            $window.location.href = '#!/textChat';
       }
-
-
-      this.re_render = function () {
-            $route.reload();
-      };
 
       // this.something = "++++++++++";
 
       this.logout = function () {
-            console.log(" link clicked");
-            $rootScope.buyer_loged_in = false;
-            $rootScope.dealer_loged_in = false;
+            console.log(" LOG-OUT clicked");
+
+            let url = baseUrl + "/user/logout?email="+$rs.userEmail;
+
+            // console.log(url);
+            $http.get(url)
+            .then(function (response) {
+                  // console.log(response); //?do something witht the response
+                  if (response.data.status === 200) {
+                        $rootScope.user_loged_in = false;
+                        console.log("Successfully logged OUT");
+                  } else {
+                        // todo : show erros to the user
+                  }
+            }, function (reject) {
+                  console.log(reject); // ?show the exception
+            });
       };
-
-
-
 });
 
 
 
-appModule.controller('user_login', function ($scope, $http, $window, $rootScope) {
+
+
+
+
+app.controller('user_login', function ($scope, $http, $window, $rootScope) {
       let $rs = $rootScope;
 
-      this.usermail = "prashantkr314@gmail.com";
+      this.email = "prashantkr314@gmail.com";
       this.password = "000000";
-      this.role = "buyer";
 
       // ! accessing the parent scope
       // console.log($scope.main.something);
@@ -101,27 +124,19 @@ appModule.controller('user_login', function ($scope, $http, $window, $rootScope)
       // console.log($scope.main.something);
       // //! ------------------------------
 
+      this.send_data = function (email, password) {
 
-
-      this.send_data = function (usermail, password, role) {
-
-            let validationErrors = validate_login_credentials(usermail, password, role);
+            let validationErrors = validate_login_credentials(email, password);
             console.log(validationErrors);
-            // console.log(usermail, password, role);
+            // console.log(email, password, role);
 
             if (validationErrors.length === 0) { //? ie if no errors do a post request to login backend
-                  let url;
-
-                  if (role === "buyer") {
-                        url = baseUrl + "/buyer/login";
-                  } else {
-                        url = baseUrl + "/dealer/login";
-                  }
-
+                  let url = baseUrl + "/user/login";
 
                   let data = {
-                        email: usermail,
-                        password: password
+                        email: email,
+                        password: password,
+                        socketId : socket.id
                   };
 
 
@@ -135,21 +150,11 @@ appModule.controller('user_login', function ($scope, $http, $window, $rootScope)
                   .then(function (response) {
                         // console.log(response); //?do something witht the response
                         if (response.data.status === 200) {
-                              allow_user_to_log_in(role); //? show success message to user
-
-                              //! sorry for this code
-                              let splited = response.data.succes_msg.split("@");
-                              $rootScope._id = splited[0];
-                              $rootScope.email = splited[1];
-                              $rootScope.fullemail = $rootScope.email + "@" + splited[2];
-                              // console.log($rootScope._id);
-                              // console.log($rootScope.email);
+                              update_user_globals(data.email); //? show success message to user
                               console.log("Successfully logged in");
-                              console.log(response.data);
-
+                              // console.log(response.data);
                         } else {
                               // todo : show erros to the user
-
                         }
                   }, function (reject) {
                         console.log(reject); // ?show the exception
@@ -158,76 +163,66 @@ appModule.controller('user_login', function ($scope, $http, $window, $rootScope)
             }
       };
 
-      function allow_user_to_log_in(role) {
+      function update_user_globals(email) {
             // ! accessing the parent scope
-
             // ? main --> is the alias for the main_controller which is parent of ueser_login controller
-            if (role === "buyer") {
-                  console.log(`before changing : ${$rs.buyer_loged_in}`);
-                  $rs.buyer_loged_in = true;
-                  console.log(`AFTER changing : ${$rs.buyer_loged_in}`);
-            } else {
-                  $rs.dealer_loged_in = true;
-            }
 
-            console.log(`Allowed :  ${role} to log in!`);
-            // alert();
-            $window.location.href = "#!/";
+            console.log(`before changing : ${$rs.user_loged_in}`);
+            $rs.user_loged_in = true;
+            console.log(`AFTER changing : ${$rs.user_loged_in}`);
 
+            $rs.userEmail = email; // --> so that each time i would know the user email, i can use it to log out the user
+
+            $window.location.href = "#!/textChat";
       }
 
 
-      function validate_login_credentials(usermail, password, role) {
+      function validate_login_credentials(email, password) {
             let ve = [];
-
-            console.log(usermail);
+            // console.log(email);
 
             // ? simple validation
-            if (usermail === "" || usermail === undefined) { // can't be empty
-            ve.push("UserMail is required");
-      } else if (usermail.length < 4) {
-            ve.push("UserMail must be min 5 character long");
-      }
+            if (email === "" || email === undefined || email.length < 4) {
+                  ve.push("email is required");
+            }
 
-      if (password === "" || password === undefined) {
-            ve.push("password is required");
-      } else if (password.length < 4) {
-            ve.push("password must be min 5 character long");
-      }
-      if (role === undefined) {
-            ve.push("select a role");
-      }
+            if (password === "" || password === undefined) {
+                  ve.push("password is required");
+            } else if (password.length < 4) {
+                  ve.push("password must be min 5 character long");
+            }
 
-      return ve;
-}
-
+            return ve;
+      }
 });
 
 
 
-appModule.controller("user_signup", function ($http, $window) {
 
 
 
-      this.send_data = function (username, email, password, password_2, address, role) {
-            let validationErrors = validate_signup_credentials(username, email, password, password_2, address, role);
+
+
+app.controller("user_signup", function ($http, $window) {
+
+      this.username= "prashant";
+      this.email = "prashantkr314@gmail.com";
+      this.password = "000000";
+      this.password_2 = "000000";
+
+
+
+      this.send_data = function (username, email, password, password_2) {
+            let validationErrors = validate_signup_credentials(username, email, password, password_2);
 
             // console.log(validationErrors);
-
             if (validationErrors.length === 0) { //? ie if no errors do a post request to login backend
-                  let url;
-
-                  if (role === "buyer") {
-                        url = baseUrl + "/buyer/signup";
-                  } else {
-                        url = baseUrl + "/dealer/signup";
-                  }
+                  let url =  baseUrl + "/user/signup";
 
                   let data = {
                         username: username,
                         email: email,
                         password: password,
-                        address: address, // Todo : at this point use geocoding to get the lat long of user
                   };
 
                   let config = {
@@ -239,62 +234,49 @@ appModule.controller("user_signup", function ($http, $window) {
                   $http.post(url, data, config)
                   .then(function (response) {
                         console.log(response);
-                        if (response.data.status === 200) { //? user is registered ---> REDIRECT
-                              $window.location.href = '#!/users/login';
+                        if (response.data.status === 200) {
+                              console.log("user registered Successfully.");
+                              $window.location.href = '#!/users/login'; //? user registered so ---> REDIRECT
                         } else {
                               // TODO : show errors to the user
+                              console.log("use not registered Might already be registered.");
                         }
-
                   }, function (reject) {
+                        console.log("User registration REJECTED");
                         console.log(reject);
                   });
-
             }
-
-
       };
 
 
-      function validate_signup_credentials(username, email, password, password_2, address, role) {
+      function validate_signup_credentials(username, email, password, password_2) {
             let ve = [];
 
             // ? simple validation
-            if (username === undefined || username === "") { // can't be empty
-            ve.push("Username is required");
-      } else if (username.length < 4 || username.length > 15) {
-            ve.push("Username can be min:5 and max:15 character long");
+            if (username === undefined || username === "" || (username.length < 4 || username.length > 15)) {
+                  ve.push("invalid username");
+            }
+
+
+            if (email === undefined || email === "") {
+                  ve.push("Email is required");
+            }
+
+
+            if (password === "" || password === undefined) {
+                  ve.push("Password is required");
+            } else if (password.length < 4) {
+                  ve.push("Password must be min 5 character long");
+            }
+
+            if (password_2 === "" || password_2 === undefined) {
+                  ve.push("Confirm your password");
+            } else if (password !== password_2) {
+                  ve.push("Passwords do not match");
+            }
+
+            return ve;
       }
-
-      if (email === undefined || email === "") {
-            ve.push("Email is required");
-      }
-
-      if (address === undefined || address === "") {
-            ve.push("Address is required");
-      } else if (address.length < 10) {
-            ve.push("Address must be min 10 character long");
-      }
-
-      if (password === "" || password === undefined) {
-            ve.push("Password is required");
-      } else if (password.length < 4) {
-            ve.push("Password must be min 5 character long");
-      }
-
-      if (password_2 === "" || password_2 === undefined) {
-            ve.push("Confirm your password");
-      } else if (password !== password_2) {
-            ve.push("Passwords do not match");
-      }
-
-      if (role === undefined) {
-            ve.push("Select a role");
-      }
-
-
-      return ve;
-}
-
 });
 
 
@@ -302,14 +284,9 @@ appModule.controller("user_signup", function ($http, $window) {
 
 
 
+// ? =======================      =================================
 
 
-// ! ========================================================
-
-
-// ? change page title
-appModule.run(['$rootScope', '$route', function ($rootScope, $route) {
-      $rootScope.$on('$routeChangeSuccess', function () {
-            document.title = $route.current.title;
-      });
+app.controller('textChat_ctrl', ['$scope', '$http', function($scope, $http){
+      console.log("textChat_ctrl controll");
 }]);

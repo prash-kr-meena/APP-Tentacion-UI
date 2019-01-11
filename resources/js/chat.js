@@ -1,10 +1,4 @@
 'use strict';
-// ==>> REMEMBER : this is running on to the front-end
-// and we need to seprate our frontend from the backend
-
-// make connection from front-end to the server
-
-let socket = io.connect('http://localhost:5000');
 
 
 //  Query DOM
@@ -22,6 +16,7 @@ btn.addEventListener('click', function(){
       let msg = message.value;
       let hndl = handle.value;
 
+      // console.log(socket, "<<<<-----");
 
       if( typeof hndl === 'string' && hndl.length > 0  && typeof msg === 'string' && msg.length > 0 ){
             socket.emit('chat', {

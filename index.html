@@ -1,24 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="appathon-frontend">
+<html lang="en" ng-app="Tencation-UI">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+
     <!-- ----------------------------  BOOTSTRAP files  --------------------------- -->
     <script src="./resources/jquery.min.js"></script> <!-- add this befor bootstrap -- IMPORTANT -->
     <link rel="stylesheet" href="./resources/bootstrap-4.1.1/css/bootstrap.min.css">
     <script src="./resources/bootstrap-4.1.1/js/bootstrap.min.js"></script>
-
-    <!-- ----------------------------  CUSTOM CSS  --------------------------- -->
-    <link rel="stylesheet" href="./resources/css/custom.css">
-
-
-    <title>APP-Tencation</title>
-
-    <script src="./resources/angular.js"></script>   <!-- angular -->
-    <script src="./resources/ng-route.js"></script>  <!-- ng-route -->
 
 
     <!-- socket io CDN -->
@@ -30,13 +22,17 @@
 
 
 
-    <!-- ng-map -->
-    <!-- <script src="//maps.google.com/maps/api/js?key=AIzaSyDSCmtZj4AhNElt0AKf7h3JboQga1qXp4k&libraries=places"></script> -->
-    <!-- <script src="/node_modules/ngmap/build/scripts/ng-map.min.js"></script> -->
+    <!-- ----------------------------  CUSTOM CSS  --------------------------- -->
+    <link rel="stylesheet" href="./resources/css/custom.css">
+
+
+    <title>APP-Tencation</title>
+
+    <script src="./resources/angular.js"></script>   <!-- angular -->
+    <script src="./resources/ng-route.js"></script>  <!-- ng-route -->
 
 
     <script src="./index.js"></script>
-
 
 </head>
 
@@ -68,11 +64,9 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
                 <!-- ie if user is logged in  -->
-                <ul ng-show="buyer_loged_in || dealer_loged_in" class="navbar-nav mr-auto">
+                <ul ng-show="user_loged_in" class="navbar-nav mr-auto">
 
-
-
-                    <li ng-show="buyer_loged_in" class="nav-item" style=" margin-left: 90px;">
+                    <li ng-show="user_loged_in" class="nav-item" style=" margin-left: 90px;">
                         <a class="nav-link" href="#!/cars">Cars</a>
                     </li>
                     <!-- -------------------------------------------------------------------- -->
@@ -86,26 +80,11 @@
 
 
 
-                    <li ng-show="buyer_loged_in" class="nav-item" style="margin-left: 90px;">
+                    <li ng-show="user_loged_in" class="nav-item" style="margin-left: 90px;">
                         <a class="nav-link" href="#!/dealers">
                             Dealers
                         </a>
                     </li>
-                    <!-- -------------------------------------------------------------------- -->
-                    <li ng-show="dealer_loged_in" class="nav-item" style=" margin-left: 90px;">
-                        <a class="nav-link" href="/">
-                            <span style="border-bottom: 1px dotted #ddd6c9; padding-bottom: 7px;">
-                                Dashboard
-                            </span>
-                        </a>
-                    </li>
-
-
-
-                    <li class="nav-item" style=" margin-left: 90px;">
-                        <a class="nav-link" href="#" ng-click="re_render()">Re-Render 3</a>
-                    </li>
-
 
                     <li class="nav-item" style=" margin-left: 90px;">
                         <a class="nav-link" href="#!/inbox">Inbox</a>
@@ -120,7 +99,7 @@
                 <ul class="navbar-nav ml-auto">
 
                     <!-- ie if user is NOT logged  -->
-                    <li ng-hide="buyer_loged_in || dealer_loged_in" class="nav-item" style=" margin-left: 90px;">
+                    <li ng-hide="user_loged_in" class="nav-item" style=" margin-left: 90px;">
                         <a class="nav-link" href="#!users/signup">
                             <span class="" style="border-bottom: 1px dotted #ddd6c9; padding-bottom: 7px;">
                                 Sign Up
@@ -128,7 +107,7 @@
                         </a>
                     </li>
 
-                    <li ng-hide="buyer_loged_in || dealer_loged_in" class="nav-item" style="margin-left: 90px; margin-right:10px;">
+                    <li ng-hide="user_loged_in" class="nav-item" style="margin-left: 90px; margin-right:10px;">
                         <a class="nav-link" href="#!users/login">
                             <span class="" style="border-bottom: 1px dotted #ddd6c9; padding-bottom: 7px;">
                                 Login
@@ -138,7 +117,7 @@
 
 
 
-                    <li ng-show="buyer_loged_in || dealer_loged_in" class="nav-item" style="margin-left: 90px; margin-right:10px;">
+                    <li ng-show="user_loged_in" class="nav-item" style="margin-left: 90px; margin-right:10px;">
                         <a ng-click="main.logout()" class="nav-link" href="/">
                             <span style="border-bottom: 1px dotted #ddd6c9; padding-bottom: 7px;">
                                 Log-out
@@ -166,4 +145,4 @@
 
 
 <!-- ----------------------------  CUSTOM JS  --------------------------- -->
-<script src="./resources/js/custom.js"> </script>
+<!-- <script src="./resources/js/custom.js"> </script> -->

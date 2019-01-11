@@ -121,10 +121,7 @@
 </style>
 
 <br>
-<br>
-<br>
-<br>
-<br>
+
 
 <form ng-controller="user_signup as us">
     <a href="#!users/login" class="stylish_yello_link"> login</a>
@@ -135,6 +132,9 @@
             <label>User Handle:</label> <input type="text" ng-model="us.username">
             <!-- {{us.username}} -->
 
+            <label>Email:</label> <input type="text" ng-model="us.email">
+            <!-- {{us.email}} -->
+
             <label>Password:</label> <input type="password" ng-model="us.password">
             <!-- {{us.password}} -->
 
@@ -142,7 +142,7 @@
             <!-- {{us.password_2}} -->
         </fieldset>
 
-        <button ng-click="us.send_data(us.username, us.email, us.password, us.password_2,us.address, us.role)">
+        <button ng-click="us.send_data(us.username, us.email, us.password, us.password_2)">
             Sign Up</button>
         </form>
     </form>

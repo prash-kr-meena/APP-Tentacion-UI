@@ -123,9 +123,7 @@
 
 <br>
 <br>
-<br>
-<br>
-<br>
+
 
 <form ng-controller="user_login as ul">
 
@@ -137,15 +135,15 @@
     <form>
         <h1>Log In</h1>
         <fieldset>
-            <label>User Handle:</label>
-            <input type="text" value="prashant" ng-model="ul.handle">
-            <!-- {{ul.handle}} -->
+            <label>Email:</label>
+            <input type="text" value="prashant" ng-model="ul.email">
+            <!-- {{ul.email}} -->
 
             <label>Password:</label>
             <input type="password" value="000000" ng-model="ul.password">
             <!-- {{ul.password}} -->
         </fieldset>
 
-        <button ng-click="ul.send_data(ul.usermail, ul.password,ul.role)" type="submit">Log In</button>
+        <button ng-click="ul.send_data(ul.email, ul.password)" type="submit">Log In</button>
     </form>
 </form>
