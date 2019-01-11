@@ -13,6 +13,8 @@
     <script src="./resources/bootstrap-4.1.1/js/bootstrap.min.js"></script>
 
 
+
+
     <!-- socket io CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
 
@@ -37,6 +39,10 @@
 </head>
 
 <body ng-controller="main_ctrl as main">
+
+    <!-- Loading page -->
+    <!-- Loader is currently dependent on the dailymotion api because it is the slowest -->
+    <div id="loading"></div>
 
 
     <div class="container" ng-hide="main.error404">
@@ -136,6 +142,7 @@
         </nav>
     </div>
 
+    <!-- dynamic ngview starts -->
     <div ng-view>
     </div>
 

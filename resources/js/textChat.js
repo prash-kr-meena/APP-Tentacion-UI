@@ -1,6 +1,5 @@
 'use strict';
 
-
 //  Query DOM
 let
 message = document.getElementById('message'),

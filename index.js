@@ -1,11 +1,15 @@
 'use strict';
 
+
 // ? ---------------------------------  Globals ------------------------------------
+
 let serverPort = 5000;
 // make connection from front-end to the server
 let socket = io.connect('http://localhost:'+serverPort);
 
 let baseUrl = 'http://localhost:' + serverPort;
+// ? ------------------------------------------------------------------------------------------------------
+
 
 
 let userEmail = undefined;
@@ -37,8 +41,11 @@ app.config(['$routeProvider', function ($routeProvider) {
       $routeProvider
       .when('/', {
             title: 'APP-Tencation',
-            // templateUrl: './views/videoSync.html',
-            templateUrl: './views/root.html',
+
+            templateUrl: './views/videoSync.html',
+            // templateUrl: './views/root.html',
+            controller: 'main_ctrl',
+
       })
       .when('/textChat', {
             title: 'TextChat',
@@ -76,8 +83,6 @@ app.controller("main_ctrl", function ($window, $rootScope, $route, $http) { // N
       this.error404 = false;
 
       this.errorList = [];
-
-
       // ? if the user is loged in don't show the car LOGO to him
       if ($rs.user_loged_in) {
             $window.location.href = '#!/textChat';
