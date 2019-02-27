@@ -1,11 +1,5 @@
 'use strict';
 
-// !  ------  socket initialization  ------
-let socket = io.connect('http://localhost:5000');
-
-
-
-
 // !! ------  ------ youtube player   ------ ------
 
 // 2. This code loads the IFrame Player API code asynchronously.

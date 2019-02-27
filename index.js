@@ -8,12 +8,6 @@ let serverPort = 5000;
 let socket = io.connect('http://localhost:'+serverPort);
 
 let baseUrl = 'http://localhost:' + serverPort;
-// ? ------------------------------------------------------------------------------------------------------
-
-
-
-let userEmail = undefined;
-
 
 
 // ? -------------------------------------------------------------------------------
@@ -32,6 +26,13 @@ app.run(['$rootScope', '$route', '$window',function ($rootScope, $route, $window
       $rootScope.user_loged_in = false; //? to check if the user loged in
       $rootScope._id = undefined;
       // $window.location.href = "#!/";
+
+
+
+      //! user info
+      $rootScope.userName = 'undefined';
+      $rootScope.userEmail = 'undefined';
+      $rootScope.userSocketId = 'undefined';
 }]);
 
 
@@ -41,11 +42,14 @@ app.config(['$routeProvider', function ($routeProvider) {
       $routeProvider
       .when('/', {
             title: 'APP-Tencation',
-
-            templateUrl: './views/videoSync.html',
-            // templateUrl: './views/root.html',
+            // templateUrl: './views/videoSync.html',
+            templateUrl: './views/root.html',
             controller: 'main_ctrl',
-
+      })
+      .when('/videoSync', {
+            title: 'TextChat',
+            controller: 'videoChat_ctrl',
+            templateUrl: './views/videoSync.html',
       })
       .when('/textChat', {
             title: 'TextChat',
@@ -101,6 +105,13 @@ app.controller("main_ctrl", function ($window, $rootScope, $route, $http) { // N
                   // console.log(response); //?do something witht the response
                   if (response.data.status === 200) {
                         $rootScope.user_loged_in = false;
+
+                        // ! Re-Set the global data
+                        $rs.userName = 'undefined';
+                        $rs.userEmail = 'undefined';
+                        $rs.userSocketId = 'undefined';
+
+                        $window.location.href = "#!/";
                         console.log("Successfully logged OUT");
                   } else {
                         // todo : show erros to the user
@@ -120,6 +131,8 @@ app.controller("main_ctrl", function ($window, $rootScope, $route, $http) { // N
 app.controller('user_login', function ($scope, $http, $window, $rootScope) {
       let $rs = $rootScope;
 
+
+      // ? for testing purpose only
       this.email = "prashantkr314@gmail.com";
       this.password = "000000";
 
@@ -153,11 +166,19 @@ app.controller('user_login', function ($scope, $http, $window, $rootScope) {
                   // console.log(url);
                   $http.post(url, data, config)
                   .then(function (response) {
-                        // console.log(response); //?do something witht the response
+                        console.log(response); //?do something witht the response
                         if (response.data.status === 200) {
                               update_user_globals(data.email); //? show success message to user
                               console.log("Successfully logged in");
                               // console.log(response.data);
+
+                              // ! set the global data
+                              $rs.userName = response.data.succes_msg.name;
+                              $rs.userEmail = response.data.succes_msg.email;
+                              $rs.userSocketId = response.data.succes_msg.socketId;
+
+                              console.log($rs.userName, $rs.userEmail, "<<<--- after login");
+
                         } else {
                               // todo : show erros to the user
                         }
@@ -178,7 +199,8 @@ app.controller('user_login', function ($scope, $http, $window, $rootScope) {
 
             $rs.userEmail = email; // --> so that each time i would know the user email, i can use it to log out the user
 
-            $window.location.href = "#!/textChat";
+            // $window.location.href = "#!/textChat";
+            $window.location.href = "#!/videoSync";
       }
 
 
@@ -292,6 +314,16 @@ app.controller("user_signup", function ($http, $window) {
 // ? =======================      =================================
 
 
-app.controller('textChat_ctrl', ['$scope', '$http', function($scope, $http){
+app.controller('textChat_ctrl', ['$scope', '$http', '$rootScope', function($scope, $http, $rootScope){
+      let $rs = $rootScope;
+      this.userHandle =  $rs.userName;
+      // this.userHandle =  "prashant";
       console.log("textChat_ctrl controll");
 }]);
+
+
+app.controller('videoChat_ctrl', ['$scope', '$http', function($scope, $http){
+      console.log("textChat_ctrl controll");
+}]);
+
+

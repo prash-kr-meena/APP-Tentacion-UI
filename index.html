@@ -40,11 +40,6 @@
 
 <body ng-controller="main_ctrl as main">
 
-    <!-- Loading page -->
-    <!-- Loader is currently dependent on the dailymotion api because it is the slowest -->
-    <div id="loading"></div>
-
-
     <div class="container" ng-hide="main.error404">
 
         <!-- A grey horizontal navbar that becomes vertical on small screens -->
@@ -72,31 +67,10 @@
                 <!-- ie if user is logged in  -->
                 <ul ng-show="user_loged_in" class="navbar-nav mr-auto">
 
-                    <li ng-show="user_loged_in" class="nav-item" style=" margin-left: 90px;">
-                        <a class="nav-link" href="#!/cars">Cars</a>
-                    </li>
-                    <!-- -------------------------------------------------------------------- -->
-                    <li ng-show="dealer_loged_in" class="nav-item" style=" margin-left: 90px;">
-                        <a class="nav-link" href="/">
-                            <span style="border-bottom: 1px dotted #ddd6c9; padding-bottom: 7px;">
-                                Add Car
-                            </span>
-                        </a>
-                    </li>
-
-
-
                     <li ng-show="user_loged_in" class="nav-item" style="margin-left: 90px;">
                         <a class="nav-link" href="#!/dealers">
-                            Dealers
+                            Watchers
                         </a>
-                    </li>
-
-                    <li class="nav-item" style=" margin-left: 90px;">
-                        <a class="nav-link" href="#!/inbox">Inbox</a>
-                    </li>
-                    <li class="nav-item" style=" margin-left: 90px;">
-                        <a class="nav-link" href="#!/outbox">Outbox</a>
                     </li>
 
                 </ul>
